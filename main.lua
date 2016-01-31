@@ -1,6 +1,6 @@
 Gamestate = require "lib/hump.gamestate"
 NHub = require "lib/nhub.nhub"
-local Lovebird = require "lib/lovebird.lovebird"
+Lovebird = require "lib/lovebird.lovebird"
 
 local menu = {}
 local game = {}
@@ -42,6 +42,8 @@ function game:update(dt)
             dt = dt
         }
     });
+
+    Lovebird.update()
 end
 
 function game:draw()
