@@ -1,5 +1,5 @@
 Gamestate = require "lib/hump.gamestate"
-NHub = require "lib/nhub/client/lua-love/noobhub"
+NHub = require "lib/nhub.nhub"
 
 local menu = {}
 local game = {}
@@ -25,7 +25,7 @@ function game:init()
         channel = "blessed-child";
         callback = function(message)
             if(message.action == "update") then
-                print(message.timestamp)
+                print(message.dt)
             end
         end
     });
@@ -38,7 +38,6 @@ function game:update(dt)
     hub:publish({
         message = {
             action  =  "update",
-            timestamp = system.getTimer(),
             dt = dt
         }
     });
