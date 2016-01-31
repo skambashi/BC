@@ -1,3 +1,6 @@
 [submodule "lib/hump"]
 	path = lib/hump
 	url = https://github.com/vrld/hump
+[submodule "lib/noobhub"]
+	path = lib/noobhub
+	url = git@github.com:Overtorment/NoobHub.git
