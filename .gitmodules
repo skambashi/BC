@@ -7,3 +7,6 @@
 [submodule "lib/nhub"]
 	path = lib/nhub
 	url = git@github.com:Overtorment/NoobHub.git
+[submodule "lib/lovebird"]
+	path = lib/lovebird
+	url = git@github.com:rxi/lovebird.git
