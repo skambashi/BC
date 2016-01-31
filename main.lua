@@ -1,5 +1,6 @@
 Gamestate = require "lib/hump.gamestate"
 NHub = require "lib/nhub.nhub"
+local Lovebird = require "lib/lovebird.lovebird"
 
 local menu = {}
 local game = {}
@@ -10,8 +11,8 @@ local hub = noobhub.new({ server = "server.kambashi.com"; port = 1337; })
 
 
 function menu:draw()
-    love.graphics.printf("BLESSED CHILD", 0, SCREEN_HEIGHT/2 - font.getHeight(font), SCREEN_WIDTH, 'center')
-    love.graphics.printf("Press ENTER to START", 0, SCREEN_HEIGHT/2 + font.getHeight(font), SCREEN_WIDTH*2.5, 'center', 0, 0.4, 0.4)
+    love.graphics.printf("BLESSED CHILD", 0, SCREEN_HEIGHT / 2 - font.getHeight(font), SCREEN_WIDTH, 'center')
+    love.graphics.printf("Press ENTER to START", 0, SCREEN_HEIGHT / 2 + font.getHeight(font), SCREEN_WIDTH * 2.5, 'center', 0, 0.4, 0.4)
 end
 
 function menu:keyreleased(key)
@@ -22,10 +23,10 @@ end
 
 function game:init()
     hub:subscribe({
-        channel = "blessed-child";
+        channel = "blessed-child",
         callback = function(message)
-            if(message.action == "update") then
-                print(message.dt)
+            if (message.action == "update") then
+                Lovebird.print(message.dt)
             end
         end
     });
