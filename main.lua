@@ -1,10 +1,12 @@
 Gamestate = require "lib/hump.gamestate"
+NHub = require "lib/nhub/client/lua-love/noobhub"
 
 local menu = {}
 local game = {}
 local pause = {}
 local SCREEN_WIDTH, SCREEN_HEIGHT = love.graphics.getDimensions()
-local font = love.graphics.newFont('res/fonts/hirosh.ttf', 48)
+local font = love.graphics.newFont('res/fonts/babyblue.ttf', 48)
+local hub = noobhub.new({ server = "server.kambashi.com"; port = 1337; })
 
 
 function menu:draw()
@@ -18,17 +20,31 @@ function menu:keyreleased(key)
     end
 end
 
+function game:init()
+    hub:subscribe({
+        channel = "blessed-child";
+        callback = function(message)
+            if(message.action == "update") then
+                print(message.timestamp)
+            end
+        end
+    });
+end
+
 function game:enter()
-    -- Entities.clear()
-    -- setup entities here
 end
 
 function game:update(dt)
-    -- Entities.update(dt)
+    hub:publish({
+        message = {
+            action  =  "update",
+            timestamp = system.getTimer(),
+            dt = dt
+        }
+    });
 end
 
 function game:draw()
-    -- Entities.draw()
     love.graphics.printf("PLAYING", 0, SCREEN_HEIGHT/2, SCREEN_WIDTH, 'center')
 end
 

@@ -1,9 +1,6 @@
 [submodule "lib/hump"]
 	path = lib/hump
 	url = https://github.com/vrld/hump
-[submodule "lib/nhub"]
-	path = lib/nhub
-	url = git@github.com:Overtorment/NoobHub.git
 [submodule "lib/fizzx"]
 	path = lib/fizzx
 	url = https://hamdanjaveed@bitbucket.org/itraykov/fizzx.git
