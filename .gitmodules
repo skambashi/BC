@@ -4,3 +4,6 @@
 [submodule "lib/noobhub"]
 	path = lib/noobhub
 	url = git@github.com:Overtorment/NoobHub.git
+[submodule "lib/fizzx"]
+	path = lib/fizzx
+	url = https://hamdanjaveed@bitbucket.org/itraykov/fizzx.git
