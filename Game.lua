@@ -1,26 +1,23 @@
+local Class = require "lib/middleclass.middleclass"
+
 require "lib/nhub.nhub"
-
-Gamestate = require "lib/hump.gamestate"
-hx = require "lib/hxdx/hxdx"
-
-Class = require "lib/hump.class"
+local Stateful = require "lib/stateful.stateful"
+local hx = require "lib/hxdx/hxdx"
 
 local SCREEN_WIDTH, SCREEN_HEIGHT = love.graphics.getDimensions()
 local FONT = love.graphics.newFont('res/fonts/babyblue.ttf', 48)
-
 local hub = noobhub.new({ server = "server.kambashi.com"; port = 1337; })
 
-local menu = {}
-local game = {}
-local pause = {}
+local Game = Class("Game")
+Game:include(Stateful)
+local menu = Game:addState("Menu")
+local play = Game:addState("Play")
+local pause = Game:addState("Pause")
 
-local Game = Class {}
-
-function Game:init()
+function Game:initialize()
     love.graphics.setFont(FONT)
 
-    Gamestate.registerEvents()
-    Gamestate.switch(menu)
+    self:gotoState("Menu")
 end
 
 function Game:update(dt)
@@ -37,49 +34,29 @@ function menu:draw()
     love.graphics.printf("Press ENTER to START", 0, SCREEN_HEIGHT / 2 + FONT.getHeight(FONT), SCREEN_WIDTH * 2.5, 'center', 0, 0.4, 0.4)
 end
 
-function menu:keyreleased(key)
-    if key == 'return' then
-        Gamestate.switch(game)
+function menu:update(dt)
+    if Input:pressed('return') then
+        self:gotoState("Play")
     end
+
+    Input:clear()
 end
 
 ----- It's only game -----
-function game:init()
-    self.world = hx.newWorld({
-        gravity_y = 200
-    })
 
-    self.world:addCollisionClass("player")
-    -- self.world:addCollisionClass("environment")
-    self.world:collisionClassesSet()
-
-    box = self.world:newRectangleCollider(375, 300, 50, 50, {
-        collision_class = "player"
-    })
-
-    ground  = self.world:newRectangleCollider(300, 400, 200, 30, {
-        -- collision_class = "environment",
-        body_type = "static"
-    })
-
+function play:init()
     hub:subscribe({
         channel = "blessed-child",
         callback = function(message)
             if (message.action == "update") then
-                Lovebird.print(message.dt)
             end
         end
     });
 end
 
-function game:enter()
-end
-
-function game:update(dt)
-    self.world:update(dt)
-
-    if box:enter("Default") then
-        box.body:applyLinearImpulse(0, -1500)
+function play:update(dt)
+    if Input:pressed('p') then
+        return self:gotoState("Pause")
     end
 
     hub:enterFrame()
@@ -90,47 +67,25 @@ function game:update(dt)
             dt = dt
         }
     });
-
-    Lovebird.update()
 end
 
-function game:draw()
+function play:draw()
     love.graphics.printf("PLAYING", 0, SCREEN_HEIGHT/2, SCREEN_WIDTH, 'center')
-    self.world:draw()
-end
-
-function game:keypressed(key)
-    if key == 'p' then
-        return Gamestate.push(pause)
-    end
-
-    if key == 'escape' then
-        love.event.push('quit')
-    end
 end
 
 ----- Pause -----
-function pause:enter(from)
-    self.from = from
+function pause:update(dt)
+    if Input:pressed('p') then
+        return self:gotoState("Play")
+    end
 end
 
 function pause:draw()
-    self.from:draw()
+    play:draw()
     love.graphics.setColor(0,0,0, 100)
     love.graphics.rectangle('fill', 0,0, SCREEN_WIDTH,SCREEN_HEIGHT)
     love.graphics.setColor(255,255,255)
     love.graphics.printf("PAUSED", 0, SCREEN_HEIGHT - FONT.getHeight(FONT)*2, SCREEN_WIDTH, 'center')
 end
-
-function pause:keypressed(key)
-    if key == 'p' then
-        return Gamestate.pop()
-    end
-
-    if key == 'escape' then
-        love.event.push('quit')
-    end
-end
-
 
 return Game

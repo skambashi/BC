@@ -1,4 +1,3 @@
--- Input Manager
 Input = require "input"
 Lovebird = require "lib/lovebird.lovebird"
 
@@ -15,8 +14,8 @@ function love.update(dt)
         love.event.quit()
     end
 
-    Input:update()
     Lovebird:update()
+    Input:clear()
 end
 
 function love.draw()

@@ -10,7 +10,7 @@ local keys = setmetatable({}, {
     end
 })
 
-function Input:update()
+function Input:clear()
     for key, value in pairs(keys) do
         value.pressed = false
         value.released = false
