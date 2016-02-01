@@ -3,6 +3,7 @@ Lovebird = require "lib/lovebird.lovebird"
 
 local Game = require "game"
 
+----- Love Handles -----
 function love.load()
     game = Game()
 end
