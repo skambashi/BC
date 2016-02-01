@@ -21,7 +21,7 @@ local play = Game:addState("Play")
 local FONT_BODY_SCALE = 0.4
 local FONT = love.graphics.newFont('res/fonts/babyblue.ttf', 48)
 local GAME_CHANNEL = "blessed-child"
-local GRAVITY = 981
+local GRAVITY = 981 * 3
 local SCREEN_WIDTH, SCREEN_HEIGHT = love.graphics.getDimensions()
 
 local server = noobhub.new({ server = "server.kambashi.com"; port = 1337; })
@@ -70,6 +70,7 @@ function play:update(dt)
     Game.update(self, dt)
 
     play.world:update(dt)
+    play.player:update(dt)
 
     if Input:pressed('p') then
         return self:pushState("Pause")
