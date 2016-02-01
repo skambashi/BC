@@ -1,5 +1,3 @@
-Class = require "lib/hump.class"
-
 local Player = Class {
     init = function(self, world, x, y)
         self.entity = world:addCollisionClass('player')
