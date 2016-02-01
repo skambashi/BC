@@ -38,8 +38,6 @@ function menu:update(dt)
     if Input:pressed('return') then
         self:gotoState("Play")
     end
-
-    Input:clear()
 end
 
 ----- It's only game -----
