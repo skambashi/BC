@@ -55,7 +55,7 @@ function play:enteredState()
 end
 
 function play:update(dt)
-    Game:update(dt)
+    Game.update(self, dt)
 
     if Input:pressed('p') then
         return self:gotoState("Pause")
@@ -75,7 +75,7 @@ end
 
 ----- Pause -----
 function pause:update(dt)
-    Game:update(dt)
+    Game.update(self, dt)
 
     if Input:pressed('p') then
         return self:gotoState("Play")
