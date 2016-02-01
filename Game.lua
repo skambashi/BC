@@ -21,7 +21,7 @@ function Game:initialize()
 end
 
 function Game:update(dt)
-
+    hub:enterFrame()
 end
 
 function Game:draw()
@@ -42,22 +42,24 @@ end
 
 ----- It's only game -----
 
-function play:init()
-    hub:subscribe({
-        channel = "blessed-child",
-        callback = function(message)
-            if (message.action == "update") then
+function play:enteredState()
+    if hub.sock == nil then
+        hub:subscribe({
+            channel = "blessed-child",
+            callback = function(message)
+                if (message.action == "update") then
+                end
             end
-        end
-    });
+        });
+    end
 end
 
 function play:update(dt)
+    Game:update(dt)
+
     if Input:pressed('p') then
         return self:gotoState("Pause")
     end
-
-    hub:enterFrame()
 
     hub:publish({
         message = {
@@ -73,6 +75,8 @@ end
 
 ----- Pause -----
 function pause:update(dt)
+    Game:update(dt)
+
     if Input:pressed('p') then
         return self:gotoState("Play")
     end
