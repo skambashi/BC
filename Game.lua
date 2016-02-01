@@ -4,15 +4,18 @@ require "lib/nhub.nhub"
 local Stateful = require "lib/stateful.stateful"
 local hx = require "lib/hxdx/hxdx"
 
-local SCREEN_WIDTH, SCREEN_HEIGHT = love.graphics.getDimensions()
-local FONT = love.graphics.newFont('res/fonts/babyblue.ttf', 48)
-local hub = noobhub.new({ server = "server.kambashi.com"; port = 1337; })
-
 local Game = Class("Game")
 Game:include(Stateful)
 local menu = Game:addState("Menu")
 local play = Game:addState("Play")
 local pause = Game:addState("Pause")
+
+local SCREEN_WIDTH, SCREEN_HEIGHT = love.graphics.getDimensions()
+local FONT = love.graphics.newFont('res/fonts/babyblue.ttf', 48)
+local hub = noobhub.new({ server = "server.kambashi.com"; port = 1337; })
+
+local Player = require "Player"
+local Ground = require "Ground"
 
 function Game:initialize()
     love.graphics.setFont(FONT)
@@ -51,13 +54,24 @@ function play:enteredState()
             end
         });
     end
+
+    play.world = hx.newWorld({
+        gravity_y = 981
+    })
+
+    Lovebird.print("Actual world: ", play.world)
+
+    play.player = Player:new(play.world, SCREEN_WIDTH / 2, 100)
+    play.ground = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30)
 end
 
 function play:update(dt)
     Game.update(self, dt)
 
+    play.world:update(dt)
+
     if Input:pressed('p') then
-        return self:gotoState("Pause")
+        return self:pushState("Pause")
     end
 
     hub:publish({
@@ -69,7 +83,9 @@ function play:update(dt)
 end
 
 function play:draw()
-    love.graphics.printf("PLAYING", 0, SCREEN_HEIGHT/2, SCREEN_WIDTH, 'center')
+    -- Draw entities
+    play.player:draw()
+    play.ground:draw()
 end
 
 ----- Pause -----
@@ -77,7 +93,7 @@ function pause:update(dt)
     Game.update(self, dt)
 
     if Input:pressed('p') then
-        return self:gotoState("Play")
+        return self:popState("Pause")
     end
 end
 
