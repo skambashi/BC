@@ -2,6 +2,7 @@ require "lib/nhub.nhub"
 
 Gamestate = require "lib/hump.gamestate"
 Lovebird = require "lib/lovebird.lovebird"
+hx = require "lib/hxdx/hxdx"
 
 ----- Local Variables -----
 local menu = {}
