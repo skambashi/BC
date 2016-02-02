@@ -39,9 +39,7 @@ function Player:update(dt)
         self.grounded = false
     end
 
-    if self.collider:enter("Ground") then
-        self.grounded = true
-    end
+    if self.collider:enter("Ground") then self.grounded = true end
 end
 
 function Player:getX()

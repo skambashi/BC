@@ -16,7 +16,7 @@ function love.update(dt)
         love.event.quit()
     end
 
-    Lovebird:update()
+    -- Lovebird:update()
 
     -- Clear our input at the end of our frame
     Input:clear()

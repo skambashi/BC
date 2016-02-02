@@ -58,9 +58,9 @@ function play:enteredState()
     play.world:addCollisionClass('Enemy', {ignores = {'Player'}})
 
     play.ground = {}
-    play.ground[0] = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30, true)
-    play.ground[1] = Ground:new(play.world, -25, 0, 30, SCREEN_HEIGHT, false)
-    play.ground[2] = Ground:new(play.world, SCREEN_WIDTH - 5, 0, 30, SCREEN_HEIGHT, false)
+    play.ground[0] = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30, "Ground")
+    play.ground[1] = Ground:new(play.world, -25, 0, 30, SCREEN_HEIGHT, "Wall")
+    play.ground[2] = Ground:new(play.world, SCREEN_WIDTH - 5, 0, 30, SCREEN_HEIGHT, "Wall")
 
     play.player = Player:new(play.world, SCREEN_WIDTH / 2, 100)
     play.enemies = {}

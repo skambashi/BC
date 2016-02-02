@@ -2,12 +2,12 @@ local Class = require "lib/middleclass.middleclass"
 
 local Ground = Class("Ground")
 
-function Ground:initialize(world, x, y, w, h, isWall)
+function Ground:initialize(world, x, y, w, h, collisionClass)
     self.width = w
     self.height = h
 
     self.collider = world:newRectangleCollider(x, y, w, h, {
-        collision_class = isWall and "Wall" or "Ground",
+        collision_class = collisionClass,
         body_type = "static"
     })
 end
