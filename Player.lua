@@ -19,12 +19,8 @@ function Player:initialize(world, x, y)
 end
 
 function Player:draw()
-    local r, g, b = love.graphics.getColor()
-
     love.graphics.setColor(255, 255, 255)
     love.graphics.rectangle("fill", self.collider.body:getX() - self.width / 2, self.collider.body:getY() - self.height / 2, self.width, self.height)
-
-    love.graphics.setColor(r, g, b)
 end
 
 function Player:update(dt)
@@ -40,7 +36,7 @@ function Player:update(dt)
         self.collider.body:setPosition(x + self.moveVel * direction * dt, y)
     end
 
-    if Input:pressed('space') and self.grounded then
+    if love.keyboard.isDown('space') and self.grounded then
         self.collider.body:applyLinearImpulse(0, -3500)
         self.grounded = false
     end
