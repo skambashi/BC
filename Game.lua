@@ -74,6 +74,9 @@ function play:enteredState()
                     end
                 end
 
+                if (message.action == "leave") then
+                    play.enemies[message.pid] = nil
+                end
             end
         });
     end
