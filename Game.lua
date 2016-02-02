@@ -56,7 +56,12 @@ function play:enteredState()
     play.world:addCollisionClass('Ground')
     play.world:addCollisionClass('Player')
     play.world:addCollisionClass('Enemy', {ignores = {'Player'}})
-    play.ground = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30)
+
+    play.ground = {}
+    play.ground[0] = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30)
+    play.ground[1] = Ground:new(play.world, -25, 0, 30, SCREEN_HEIGHT)
+    play.ground[2] = Ground:new(play.world, SCREEN_WIDTH - 5, 0, 30, SCREEN_HEIGHT)
+
     play.player = Player:new(play.world, SCREEN_WIDTH / 2, 100)
     play.enemies = {}
 
@@ -65,12 +70,15 @@ function play:enteredState()
             channel = GAME_CHANNEL,
             callback = function(message)
                 if (message.action == "update") then
-                    x = (message.x)
-                    y = (message.y)
+                    x = message.x
+                    y = message.y
+                    xVel = message.xVel
+                    yVel = message.yVel
+
                     if play.enemies[message.pid] == nil then
-                        play.enemies[message.pid] = Enemy:new(play.world, x, y)
+                        play.enemies[message.pid] = Enemy:new(play.world, x, y, xVel, yVel)
                     else
-                        play.enemies[message.pid]:update(x, y)
+                        play.enemies[message.pid]:update(x, y, xVel, yVel)
                     end
                 end
 
@@ -91,23 +99,31 @@ function play:update(dt)
     if Input:pressed('p') then
         return self:pushState("Pause")
     end
-    
+
     publish = coroutine.create(function ()
+        local xVel, yVel = play.player:getVel()
+
         server:publish({
             message = {
                 action  =  "update",
                 x = play.player:getX(),
-                y = play.player:getY()
+                y = play.player:getY(),
+                xVel = xVel,
+                yVel = yVel
             }
         })
     end)
+
     coroutine.resume(publish)
 end
 
 function play:draw()
     -- Draw entities
     play.player:draw()
-    play.ground:draw()
+
+    for i = 0, 2 do
+        play.ground[i]:draw()
+    end
     for _,v in pairs(play.enemies) do
         v:draw()
     end

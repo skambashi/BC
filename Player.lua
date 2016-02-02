@@ -8,7 +8,7 @@ function Player:initialize(world, x, y)
 
     self.moveLeft = false
     self.moveRight = false
-    self.moveVel = 500
+    self.moveVel = 12000
 
     self.grounded = false
     self.collider = world:newRectangleCollider(x - self.width / 2, y, self.width, self.height, {
@@ -31,7 +31,7 @@ function Player:update(dt)
     if self.moveLeft ~= self.moveRight then
         local direction = self.moveLeft and -1 or 1
         local x, y = self.collider.body.getPosition(self.collider.body)
-        self.collider.body:setPosition(x + self.moveVel * direction * dt, y)
+        self.collider.body:applyLinearImpulse(self.moveVel * direction * dt, 0)
     end
 
     if love.keyboard.isDown('space') and self.grounded then
@@ -50,6 +50,10 @@ end
 
 function Player:getY()
     return self.collider.body:getY()
+end
+
+function Player:getVel()
+    return self.collider.body:getLinearVelocity()
 end
 
 return Player
