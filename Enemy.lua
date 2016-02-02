@@ -17,9 +17,8 @@ function Enemy:draw()
     love.graphics.rectangle("fill", self.collider.body:getX() - self.width / 2, self.collider.body:getY() - self.height / 2, self.width, self.height)
 end
 
-function Enemy:update(x, y, xVel, yVel)
+function Enemy:update(x, y)
     self.collider.body:setPosition(x, y)
-    self.collider.body:setLinearVelocity(xVel, yVel)
 end
 
 return Enemy

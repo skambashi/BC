@@ -58,9 +58,9 @@ function play:enteredState()
     play.world:addCollisionClass('Enemy', {ignores = {'Player'}})
 
     play.ground = {}
-    play.ground[0] = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30, false)
-    play.ground[1] = Ground:new(play.world, -25, 0, 30, SCREEN_HEIGHT, true)
-    play.ground[2] = Ground:new(play.world, SCREEN_WIDTH - 5, 0, 30, SCREEN_HEIGHT, true)
+    play.ground[0] = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30, true)
+    play.ground[1] = Ground:new(play.world, -25, 0, 30, SCREEN_HEIGHT, false)
+    play.ground[2] = Ground:new(play.world, SCREEN_WIDTH - 5, 0, 30, SCREEN_HEIGHT, false)
 
     play.player = Player:new(play.world, SCREEN_WIDTH / 2, 100)
     play.enemies = {}
@@ -72,13 +72,11 @@ function play:enteredState()
                 if (message.action == "update") then
                     x = message.x
                     y = message.y
-                    xVel = message.xVel
-                    yVel = message.yVel
 
                     if play.enemies[message.pid] == nil then
-                        play.enemies[message.pid] = Enemy:new(play.world, x, y, xVel, yVel)
+                        play.enemies[message.pid] = Enemy:new(play.world, x, y)
                     else
-                        play.enemies[message.pid]:update(x, y, xVel, yVel)
+                        play.enemies[message.pid]:update(x, y)
                     end
                 end
 
@@ -101,15 +99,11 @@ function play:update(dt)
     end
 
     publish = coroutine.create(function ()
-        local xVel, yVel = play.player:getVel()
-
         server:publish({
             message = {
                 action  =  "update",
                 x = play.player:getX(),
-                y = play.player:getY(),
-                xVel = xVel,
-                yVel = yVel
+                y = play.player:getY()
             }
         })
     end)
