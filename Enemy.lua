@@ -8,7 +8,9 @@ function Enemy:initialize(world, x, y)
 
     world:addCollisionClass('Enemy')
     self.collider = world:newRectangleCollider(x - self.width / 2, y, self.width, self.height, {
-        collision_class = "Enemy"
+        collision_class = "Enemy",
+        ignores = { 'Player' },
+        body_type = 'static'
     })
 end
 
