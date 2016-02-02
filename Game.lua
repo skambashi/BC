@@ -70,13 +70,22 @@ function play:enteredState()
             channel = GAME_CHANNEL,
             callback = function(message)
                 if (message.action == "update") then
-                    x = message.x
-                    y = message.y
+                    local snapshot = {
+                        x = message.x,
+                        y = message.y,
+                        t = os.time()
+                    }
 
                     if play.enemies[message.pid] == nil then
-                        play.enemies[message.pid] = Enemy:new(play.world, x, y)
+                        local enemySnapshot = {
+                            enemy = Enemy:new(play.world, snapshot.x, snapshot.y),
+                            snapshots = {}
+                        }
+
+                        table.insert(enemySnapshot.snapshots, snapshot)
+                        play.enemies[message.pid] = enemySnapshot
                     else
-                        play.enemies[message.pid]:update(x, y)
+                        table.insert(play.enemies[message.pid], snapshot)
                     end
                 end
 
@@ -93,6 +102,10 @@ function play:update(dt)
 
     play.world:update(dt)
     play.player:update(dt)
+
+    for _, enemySnapshot in pairs(play.enemies) do
+        enemySnapshot.enemy:update(enemySnapshot.snapshots)
+    end
 
     if Input:pressed('p') then
         return self:pushState("Pause")
@@ -118,8 +131,8 @@ function play:draw()
     for i = 0, 2 do
         play.ground[i]:draw()
     end
-    for _,v in pairs(play.enemies) do
-        v:draw()
+    for _, enemySnapshot in pairs(play.enemies) do
+        enemySnapshot.enemy:draw()
     end
 end
 

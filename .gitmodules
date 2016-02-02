@@ -15,3 +15,6 @@
 [submodule "lib/stateful"]
 	path = lib/stateful
 	url = git@github.com:kikito/stateful.lua.git
+[submodule "lib/inspect"]
+	path = lib/inspect
+	url = git@github.com:kikito/inspect.lua.git

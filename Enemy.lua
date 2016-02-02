@@ -17,8 +17,8 @@ function Enemy:draw()
     love.graphics.rectangle("fill", self.collider.body:getX() - self.width / 2, self.collider.body:getY() - self.height / 2, self.width, self.height)
 end
 
-function Enemy:update(x, y)
-    self.collider.body:setPosition(x, y)
+function Enemy:update(snapshots)
+    -- Lovebird.print(inspect(snapshots[1]))
 end
 
 return Enemy

@@ -1,5 +1,7 @@
 Input = require "input"
 Lovebird = require "lib/lovebird.lovebird"
+inspect = require "lib/inspect.inspect"
+-- Lovebird.port = 9000
 
 local Game = require "game"
 
@@ -16,7 +18,7 @@ function love.update(dt)
         love.event.quit()
     end
 
-    -- Lovebird:update()
+    Lovebird:update()
 
     -- Clear our input at the end of our frame
     Input:clear()
