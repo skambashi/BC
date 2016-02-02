@@ -15,7 +15,7 @@ function Enemy:initialize(world, x, y)
 end
 
 function Enemy:draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(226, 118, 74)
     love.graphics.rectangle("fill", self.collider.body:getX() - self.width / 2, self.collider.body:getY() - self.height / 2, self.width, self.height)
 end
 

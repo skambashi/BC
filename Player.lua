@@ -19,7 +19,7 @@ function Player:initialize(world, x, y)
 end
 
 function Player:draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(30, 140, 192)
     love.graphics.rectangle("fill", self.collider.body:getX() - self.width / 2, self.collider.body:getY() - self.height / 2, self.width, self.height)
 end
 

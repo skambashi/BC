@@ -14,7 +14,7 @@ function Ground:initialize(world, x, y, w, h)
 end
 
 function Ground:draw()
-    love.graphics.setColor(64, 128, 244)
+    love.graphics.setColor(128, 184, 163)
     love.graphics.rectangle("fill", self.collider.body:getX() - self.width / 2, self.collider.body:getY() - self.height / 2, self.width, self.height)
 end
 
