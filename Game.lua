@@ -62,10 +62,12 @@ function play:enteredState()
             channel = GAME_CHANNEL,
             callback = function(message)
                 if (message.action == "update") then
+                    x = tonumber(message.x)
+                    y = tonumber(message.y)
                     if play.enemies[message.pid] == nil then
-                        play.enemies[message.pid] = Enemy:new(play.word, message.x, message.y)
+                        play.enemies[message.pid] = Enemy:new(play.world, play.word, x, y)
                     else
-                        play.enemies[message.pid].update(message.x, message.y)
+                        play.enemies[message.pid].update(x, y)
                     end
                 end
 
