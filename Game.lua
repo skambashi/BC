@@ -62,8 +62,8 @@ function play:enteredState()
             channel = GAME_CHANNEL,
             callback = function(message)
                 if (message.action == "update") then
-                    x = tonumber(message.x)
-                    y = tonumber(message.y)
+                    x = (message.x)
+                    y = (message.y)
                     if play.enemies[message.pid] == nil then
                         play.enemies[message.pid] = Enemy:new(play.world, x, y)
                     else
@@ -89,8 +89,8 @@ function play:update(dt)
     server:publish({
         message = {
             action  =  "update",
-            x = play.player.x,
-            y = play.player.y
+            x = play.player:getX(),
+            y = play.player:getY()
         }
     });
 end
