@@ -46,4 +46,12 @@ function Player:update(dt)
     end
 end
 
+function Player:getX()
+    self.collider.body:getX()
+end
+
+function Player:getY()
+    self.collider.body:getY()
+end
+
 return Player

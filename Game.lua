@@ -65,7 +65,7 @@ function play:enteredState()
                     x = tonumber(message.x)
                     y = tonumber(message.y)
                     if play.enemies[message.pid] == nil then
-                        play.enemies[message.pid] = Enemy:new(play.world, play.word, x, y)
+                        play.enemies[message.pid] = Enemy:new(play.world, x, y)
                     else
                         play.enemies[message.pid].update(x, y)
                     end
