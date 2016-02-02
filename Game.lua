@@ -91,14 +91,17 @@ function play:update(dt)
     if Input:pressed('p') then
         return self:pushState("Pause")
     end
-
-    server:publish({
-        message = {
-            action  =  "update",
-            x = play.player:getX(),
-            y = play.player:getY()
-        }
-    });
+    
+    publish = coroutine.create(function ()
+        server:publish({
+            message = {
+                action  =  "update",
+                x = play.player:getX(),
+                y = play.player:getY()
+            }
+        })
+    end)
+    coroutine.resume(publish)
 end
 
 function play:draw()
@@ -111,6 +114,9 @@ function play:draw()
 end
 
 -- Pause
+function pause:enteredState()
+end
+
 function pause:update(dt)
     Game.update(self, dt)
 
