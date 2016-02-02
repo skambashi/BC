@@ -11,8 +11,6 @@ function Player:initialize(world, x, y)
     self.moveVel = 500
 
     self.grounded = false
-
-    world:addCollisionClass('Player')
     self.collider = world:newRectangleCollider(x - self.width / 2, y, self.width, self.height, {
         collision_class = "Player"
     })

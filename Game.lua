@@ -53,6 +53,9 @@ end
 -- It's only game.
 function play:enteredState()
     play.world = Hxdx.newWorld({ gravity_y = GRAVITY })
+    play.world:addCollisionClass('Ground')
+    play.world:addCollisionClass('Player')
+    play.world:addCollisionClass('Enemy', {ignores = {'Player'}})
     play.ground = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30)
     play.player = Player:new(play.world, SCREEN_WIDTH / 2, 100)
     play.enemies = {}

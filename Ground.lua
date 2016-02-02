@@ -6,7 +6,6 @@ function Ground:initialize(world, x, y, w, h)
     self.width = w
     self.height = h
 
-    world:addCollisionClass('Ground')
     self.collider = world:newRectangleCollider(x, y, w, h, {
         collision_class = "Ground",
         body_type = "static"
