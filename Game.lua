@@ -7,6 +7,7 @@ local Stateful = require "lib/stateful.stateful"
 -- Entities
 local Ground = require "Ground"
 local Player = require "Player"
+local Enemy = require "Enemy"
 
 -- Game class to be returned
 local Game = Class("Game")
@@ -51,19 +52,34 @@ end
 
 -- It's only game.
 function play:enteredState()
+    play.world = Hxdx.newWorld({ gravity_y = GRAVITY })
+    play.world:addCollisionClass('Ground')
+    play.world:addCollisionClass('Player')
+    play.world:addCollisionClass('Enemy', {ignores = {'Player'}})
+    play.ground = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30)
+    play.player = Player:new(play.world, SCREEN_WIDTH / 2, 100)
+    play.enemies = {}
+
     if server.sock == nil then
         server:subscribe({
             channel = GAME_CHANNEL,
             callback = function(message)
                 if (message.action == "update") then
+                    x = (message.x)
+                    y = (message.y)
+                    if play.enemies[message.pid] == nil then
+                        play.enemies[message.pid] = Enemy:new(play.world, x, y)
+                    else
+                        play.enemies[message.pid]:update(x, y)
+                    end
+                end
+
+                if (message.action == "leave") then
+                    play.enemies[message.pid] = nil
                 end
             end
         });
     end
-
-    play.world = Hxdx.newWorld({ gravity_y = GRAVITY })
-    play.ground = Ground:new(play.world, 0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30)
-    play.player = Player:new(play.world, SCREEN_WIDTH / 2, 100)
 end
 
 function play:update(dt)
@@ -75,22 +91,32 @@ function play:update(dt)
     if Input:pressed('p') then
         return self:pushState("Pause")
     end
-
-    server:publish({
-        message = {
-            action  =  "update",
-            dt = dt
-        }
-    });
+    
+    publish = coroutine.create(function ()
+        server:publish({
+            message = {
+                action  =  "update",
+                x = play.player:getX(),
+                y = play.player:getY()
+            }
+        })
+    end)
+    coroutine.resume(publish)
 end
 
 function play:draw()
     -- Draw entities
     play.player:draw()
     play.ground:draw()
+    for _,v in pairs(play.enemies) do
+        v:draw()
+    end
 end
 
 -- Pause
+function pause:enteredState()
+end
+
 function pause:update(dt)
     Game.update(self, dt)
 
