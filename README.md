@@ -1,2 +1,2 @@
 # BC
-Blessed Child - RPG with inheritance
+Simple networked game.
